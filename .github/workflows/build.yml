@@ -1,0 +1,47 @@
+name: Build latest
+on: [push]
+
+concurrency:
+  group: ${{ github.ref }}-latest
+  cancel-in-progress: true
+
+jobs:
+  build-mono:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Compile ClassicalSharp using mono
+        shell: bash
+        id: compile
+        run: |
+          msbuild ClassicalSharp.sln /p:Configuration=Release
+          cp -R bin/Release bin/Release_normal
+          rm bin/Release/ClassicalSharp.exe bin/Release/ClassicalSharp.pdb
+          msbuild ClassicalSharp/ClassicalSharp.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="ANDROID"
+          rm bin/Release/Launcher2.exe bin/Release/Launcher2.pdb
+          msbuild Launcher2/Launcher2.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="ANDROID"
+          rm bin/Release/Updater.exe bin/Release/Updater.pdb
+          msbuild Updater/Updater.csproj /p:Configuration=Release
+
+      - uses: ./.github/actions/notify_failure
+        if: ${{ always() && steps.compile.outcome == 'failure' }}
+        with:
+          NOTIFY_MESSAGE: 'Failed to compile ClassicalSharp build! <@999409543001931788>'
+          WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'
+          
+      - uses: ./.github/actions/notify_success
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'bin/Release_normal'
+          DEST_NAME: 'ClassicalSharp'
+          NOTIFY_MESSAGE: 'Successfully compiled ClassicalSharp Android build.'
+          WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'
+          
+      - uses: ./.github/actions/notify_success
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'bin/Release'
+          DEST_NAME: 'ClassicalSharp.apk'
+          NOTIFY_MESSAGE: 'Successfully compiled ClassicalSharp Android build.'
+          WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'
