@@ -52,7 +52,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>..\..\..\..\..\..\..\bin\release\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Cecil">
