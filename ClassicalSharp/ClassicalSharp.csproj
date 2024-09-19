@@ -424,11 +424,12 @@
       <Name>SharpWave</Name>
     </ProjectReference>
   </ItemGroup>
-  <Target Name="AfterBuild">
-    <Exec Command="$(OutputPath)InteropPatcher.exe $(OutDir)ClassicalSharp.exe" />
-    <!--Copy back *.dll from bin/Debug|Release to obj/Debug/Release directory-->
-    <Copy SourceFiles="@(MainAssembly)" DestinationFolder="$(IntermediateOutputPath)" SkipUnchangedFiles="true" />
-    <!-- Copy back *.pdb from bin/Debug|Release to obj/Debug/Release directory-->
-    <Copy SourceFiles="@(_DebugSymbolsOutputPath)" DestinationFiles="@(_DebugSymbolsIntermediatePath)" SkipUnchangedFiles="true" Condition="'$(_DebugSymbolsProduced)'=='true' and '$(SkipCopyingSymbolsToOutputDirectory)' != 'true'" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
   </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
