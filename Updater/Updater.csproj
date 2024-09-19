@@ -17,7 +17,7 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
 
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
