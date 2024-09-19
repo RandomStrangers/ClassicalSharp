@@ -17,11 +17,11 @@ jobs:
         run: |
           msbuild ClassicalSharp.sln /p:Configuration=Release
           cp -R bin/Release bin/Release_normal
-          rm bin/Release/ClassicalSharp.exe bin/Release/ClassicalSharp.pdb
+          rm bin/Release/ClassicalSharp.exe
           msbuild ClassicalSharp/ClassicalSharp.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="ANDROID"
-          rm bin/Release/Launcher2.exe bin/Release/Launcher2.pdb
+          rm bin/Release/Launcher2.exe
           msbuild Launcher2/Launcher2.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="ANDROID"
-          rm bin/Release/Updater.exe bin/Release/Updater.pdb
+          rm bin/Release/Updater.exe
           msbuild Updater/Updater.csproj /p:Configuration=Release
 
       - uses: ./.github/actions/notify_failure
