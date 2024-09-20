@@ -10,7 +10,7 @@ jobs:
     if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Compile ClassicalSharp using mono
         shell: bash
         id: compile
@@ -21,19 +21,17 @@ jobs:
           msbuild ClassicalSharp/ClassicalSharp.csproj /p:Configuration=Release /p:DefineConstants="ANDROID"
           rm bin/Release/Launcher2.exe
           msbuild Launcher2/Launcher2.csproj /p:Configuration=Release /p:DefineConstants="ANDROID"
-          rm bin/Release/Updater.exe
-          msbuild Updater/Updater.csproj /p:Configuration=Release
 
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile.outcome == 'failure' }}
         with:
-          NOTIFY_MESSAGE: 'Failed to compile ClassicalSharp Android build! <@999409543001931788>'
+          NOTIFY_MESSAGE: 'Failed to compile ClassicalSharp Android build.'
           WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'
           
       - uses: ./.github/actions/notify_success
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
           SOURCE_FILE: 'bin/Release_normal'
-          DEST_NAME: 'ClassicalSharp'
+          DEST_NAME: 'ClassicalSharp.apk'
           NOTIFY_MESSAGE: 'Successfully compiled ClassicalSharp Android build.'
           WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'

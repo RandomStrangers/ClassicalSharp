@@ -1,4 +1,4 @@
-name: Build latest
+name: Build Windows
 on: [push]
 
 concurrency:
@@ -10,7 +10,7 @@ jobs:
     if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Compile ClassicalSharp using mono
         shell: bash
         id: compile
