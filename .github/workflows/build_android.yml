@@ -18,16 +18,16 @@ jobs:
           msbuild ClassicalSharp.sln /p:Configuration=Release
           cp -R bin/Release bin/Release_normal
           rm bin/Release/ClassicalSharp.exe
-          msbuild ClassicalSharp/ClassicalSharp.csproj /p:Configuration=Release
+          msbuild ClassicalSharp/ClassicalSharp.csproj /p:Configuration=Release /p:DefineConstants="ANDROID"
           rm bin/Release/Launcher2.exe
-          msbuild Launcher2/Launcher2.csproj /p:Configuration=Release
+          msbuild Launcher2/Launcher2.csproj /p:Configuration=Release /p:DefineConstants="ANDROID"
           rm bin/Release/Updater.exe
           msbuild Updater/Updater.csproj /p:Configuration=Release
 
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile.outcome == 'failure' }}
         with:
-          NOTIFY_MESSAGE: 'Failed to compile ClassicalSharp build! <@999409543001931788>'
+          NOTIFY_MESSAGE: 'Failed to compile ClassicalSharp Android build! <@999409543001931788>'
           WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'
           
       - uses: ./.github/actions/notify_success
@@ -35,5 +35,5 @@ jobs:
         with:
           SOURCE_FILE: 'bin/Release_normal'
           DEST_NAME: 'ClassicalSharp'
-          NOTIFY_MESSAGE: 'Successfully compiled ClassicalSharp build.'
+          NOTIFY_MESSAGE: 'Successfully compiled ClassicalSharp Android build.'
           WEBHOOK_URL: '${{ secrets.WEBHOOK_URL }}'

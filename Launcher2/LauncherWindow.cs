@@ -63,10 +63,10 @@ namespace Launcher {
 			Window.WindowStateChanged += Resize;
 			Window.Redraw += RedrawPending;
 			Keyboard.KeyDown += KeyDown;
-			
+
 			LoadSettings();
 			logoFont = new Font(FontName, 32, FontStyle.Regular);
-			
+
 			string path = Assembly.GetExecutingAssembly().Location;
 			try {
 				Window.Icon = Icon.ExtractAssociatedIcon(path);
@@ -74,7 +74,7 @@ namespace Launcher {
 				ErrorHandler.LogError("LauncherWindow.Init() - Icon", ex);
 			}
 			//Minimised = Window.WindowState == WindowState.Minimized;
-			
+
 			PlatformID platform = Environment.OSVersion.Platform;
 			if (platform == PlatformID.Win32Windows) {
 				platformDrawer = new WinOldPlatformDrawer();
@@ -85,14 +85,17 @@ namespace Launcher {
 			} else if (Configuration.RunningOnMacOS) {
 				platformDrawer = new OSXPlatformDrawer();
 			}
-			
+
 			IDrawer2D.Cols['g'] = new PackedCol(125, 125, 125);
-			
-			if (!Platform.FileExists(Client.GetCExeName())) {
-                string UpdatePath = Directory.GetCurrentDirectory();
-                Process.Start(UpdatePath + "/Updater.exe");
+			if (Configuration.RunningOnWindows) 
+			{
+				if (!Platform.FileExists(Client.GetCExeName())) 
+				{
+					string UpdatePath = Directory.GetCurrentDirectory();
+					Process.Start(UpdatePath + "/Updater.exe");
+				} 
 			}
-		     bool Warned = Options.GetBool(OptionsKey.CClient, false);
+		    bool Warned = Options.GetBool(OptionsKey.CClient, false);
             if (!Warned)
             {
                 ErrorHandler.ShowDialog("Deprecated Client",
