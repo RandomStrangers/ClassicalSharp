@@ -1,8 +1,8 @@
-name: Build latest
+name: Build android
 on: [push]
 
 concurrency:
-  group: ${{ github.ref }}-latest
+  group: ${{ github.ref }}-Android
   cancel-in-progress: true
 
 jobs:
